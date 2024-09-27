@@ -1,5 +1,6 @@
 {
     "abecedario": "abc",
+    "expresion": "a(a+b+c)*(a+b)c",
     "estados": 6,
     "inicial": 0,
     "finales": [

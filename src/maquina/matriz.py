@@ -4,16 +4,25 @@ import json
 from estados import Estados
 
 class Matriz:
+    '''
+    private matriz: dict
+    private estados: Estados
+
+    Dado un archivo de expresiones, crea una matriz
+    de estados así como los estados disponibles.
+
+    Encapsula la matriz y provee de las funciones
+    y accesos esenciales.
+    '''
+
     def __init__(self, estados: Estados, expr_file: str):
         expr = json.load(open(expr_file))
         self.matriz = expr["matriz"]
         self.estados = estados
 
-    def __iter__(self):
-        for i in range(len(self.matriz)):
-            for j in range(len(self.matriz[i])):
-                yield self.matriz[i][j]
+    def __getitem__(self, keyi):
+        return self.matriz[keyi]
 
-    def __getitem__(self, key):
-        return self.matriz[key]
+    def items(self):
+        return self.matriz.items()
 
