@@ -1,5 +1,5 @@
 {
-    "abecedario": "xyz",
+    "alfabeto": "xyz",
     "expresion": "x((yz)*)+((y+z)+(xx*))",
     "estados": 7,
     "inicial": 0,
