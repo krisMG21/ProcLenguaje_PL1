@@ -110,7 +110,7 @@ class Matriz:
             9 _ _ _ ... _
         '''
         # Fila de letras
-        cadena = '  ' + ' '.join(self.alfabeto) + '\n'
+        cadena = '  ' + ' '.join(self.alfabeto) + ' \n'
 
         # Estado actual + siguientes estados
         for estado in self.estados:
@@ -151,9 +151,10 @@ class Maquina:
         '''Constructor de la maquina directamente desde un json'''
 
         config = json.load(open(json_file))
+        self.expr = config["expresion"]
         self.alfabeto = Alfabeto(config["alfabeto"])
         self.estados = Estados(
-            config["estados"],
+            list(range(config["estados"])),
             config["inicial"],
             config["finales"])
         self.matriz = Matriz(config["alfabeto"], config["matriz"])
@@ -172,11 +173,15 @@ class Maquina:
 
     def get_estados(self):
         '''Devuelve los estados'''
-        return self.estados
+        return self.estados.get()
 
     def get_alfabeto(self):
         '''Devuelve el alfabeto'''
-        return self.alfabeto
+        return self.alfabeto.get()
+
+    def get_expr(self):
+        '''Devuelve la expresión'''
+        return self.expr
 
     def next_state(self, char):
         '''Siguiente estado de la maquina, devuelve si la transición es válida o no'''

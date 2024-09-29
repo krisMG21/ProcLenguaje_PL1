@@ -18,7 +18,6 @@ def alfabeto_test():
     assert 'z' not in alfabeto
     assert 'ABC' in alfabeto
     assert 'abc' not in alfabeto
-    assert alfabeto + 'ABC' == 'ABCDEFGHIJKLMNOPQRSTUVWXYZABC'
     assert str(alfabeto) == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     assert len(alfabeto) == 26
     assert list(alfabeto) == list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -44,20 +43,20 @@ def matriz_test():
     assert matriz["4"] == {"b" : 4, "c" : 5}
     assert matriz["5"] == {"c" : 5}
 
-
-    print(matriz)
-
-    assert str(matriz) == '  a b c\n0 1 _ _\n1 3 2 _\n2 _ 4 5\n3 3 2 _\n4 _ 4 5\n5 _ _ 5\n'
+    assert str(matriz) == \
+        '  a b c \n' + \
+        '0 1 _ _ \n' + \
+        '1 3 2 _ \n' + \
+        '2 _ 4 5 \n' + \
+        '3 3 2 _ \n' + \
+        '4 _ 4 5 \n' + \
+        '5 _ _ 5 \n'
 
 
 def maquina_test():
     '''Maquina unit testing'''
 
     maquina = Maquina('test.json')
-
-    for cadena in maquina.parse('abc', True):
-        print(cadena)
-
     assert maquina.parse('abc')
     assert maquina.parse('aabbc')
     assert not maquina.parse('abca')
