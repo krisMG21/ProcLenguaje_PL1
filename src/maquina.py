@@ -29,11 +29,11 @@ class Alfabeto:
     def __iter__(self):
         return iter(self.letras)
 
-    def get(self):
-        return self.letras
-
     def __contains__(self, letra):
         return letra in self.letras
+
+    def get(self):
+        return self.letras
 
     def index(self, letra):
         return self.letras.index(letra)
