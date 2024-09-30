@@ -29,6 +29,9 @@ class Alfabeto:
     def __iter__(self):
         return iter(self.letras)
 
+    def get(self):
+        return self.letras
+
     def __contains__(self, letra):
         return letra in self.letras
 
@@ -177,7 +180,7 @@ class Maquina:
 
     def get_alfabeto(self):
         '''Devuelve el alfabeto'''
-        return str(self.alfabeto)
+        return self.alfabeto.get()
 
     def get_expr(self):
         '''Devuelve la expresión'''
