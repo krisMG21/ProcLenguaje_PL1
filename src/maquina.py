@@ -14,7 +14,7 @@ class Alfabeto:
     comportamiento que se requiere para el proyecto.
     '''
 
-    def __init__(self, letras):
+    def __init__(self, letras : str):
         self.letras = letras
 
     def __str__(self):
@@ -177,7 +177,7 @@ class Maquina:
 
     def get_alfabeto(self):
         '''Devuelve el alfabeto'''
-        return self.alfabeto.get()
+        return str(self.alfabeto)
 
     def get_expr(self):
         '''Devuelve la expresión'''
