@@ -37,21 +37,16 @@ def matriz_test():
     matriz = Matriz(config["alfabeto"], config["matriz"])
 
     assert matriz["0"] == {"a" : 1}
-    assert matriz["1"] == {"a" : 3, "b" : 2}
-    assert matriz["2"] == {"b" : 4, "c" : 5}
-    assert matriz["3"] == {"a" : 3, "b" : 2}
-    assert matriz["4"] == {"b" : 4, "c" : 5}
-    assert matriz["5"] == {"c" : 5}
+    assert matriz["1"] == {"a" : 1, "b" : 2}
+    assert matriz["2"] == {"b" : 2, "c" : 3}
+    assert matriz["3"] == {}
 
     assert str(matriz) == \
         '  a b c \n' + \
         '0 1 _ _ \n' + \
-        '1 3 2 _ \n' + \
-        '2 _ 4 5 \n' + \
-        '3 3 2 _ \n' + \
-        '4 _ 4 5 \n' + \
-        '5 _ _ 5 \n'
-
+        '1 1 2 _ \n' + \
+        '2 _ 2 3 \n' + \
+        '3 _ _ _ \n'
 
 def maquina_test():
     '''Maquina unit testing'''
@@ -62,10 +57,33 @@ def maquina_test():
     assert not maquina.parse('abca')
     assert not maquina.parse('abcabc')
 
-     # Para cualquier caso, no hay mas de n palabras, con no mas de m caracteres
+    assert maquina.trace('abc') == \
+        [(0, 'a', 1),
+         (1, 'b', 2),
+         (2, 'c', 3)]
+    assert maquina.trace('aabbc') == \
+        [(0, 'a', 1),
+         (1, 'a', 1),
+         (1, 'b', 2),
+         (2, 'b', 2),
+         (2, 'c', 3)]
+    assert maquina.trace('abca') == \
+        [(0, 'a', 1),
+         (1, 'b', 2),
+         (2, 'c', 3),
+         (3, 'a', -1)]
+    assert maquina.trace('error') == \
+        [(0, 'e', -1),
+        (-1, 'r', -1),
+        (-1, 'r', -1),
+        (-1, 'o', -1),
+        (-1, 'r', -1)]
+
+    # Para cualquier caso, no hay mas de n palabras, con no mas de m caracteres
     n = 100
     m = 10
 
+    # Comprobamos que todas las cadenas son válidas y no exceden ni n ni m
     for i, cadena in enumerate(maquina.generate(n, m)):
         assert len(cadena) <= m
         assert maquina.parse(cadena)

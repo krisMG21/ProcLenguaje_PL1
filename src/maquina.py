@@ -1,4 +1,4 @@
-# maquina.py
+# maquinapy
 
 import json
 
@@ -63,13 +63,17 @@ class Estados:
         self.inicial = inicial
         self.finales = finales
 
-    def get(self):
+    def get_estados(self):
         '''Devuelve los estados'''
         return self.estados
 
-    def get_inicial(self):
+    def get_inicial(self) -> int:
         '''Devuelve el estado inicial'''
         return self.inicial
+
+    def get_finales(self) -> list[int]:
+        '''Devuelve los estados finales'''
+        return self.finales
 
     def is_estado(self, estado : int):
         '''Devuelve si el estado es válido'''
@@ -175,8 +179,10 @@ class Maquina:
         return self.matriz
 
     def get_estados(self):
-        '''Devuelve los estados'''
-        return self.estados.get()
+        '''Devuelve los estados de forma legible'''
+        return str(self.estados.get_estados()) + \
+            '\n Inicial: ' + str(self.estados.get_inicial()) + \
+            '\n Finales: ' + str(self.estados.get_finales()) + '\n'
 
     def get_alfabeto(self):
         '''Devuelve el alfabeto'''
@@ -187,54 +193,70 @@ class Maquina:
         return self.expr
 
     def next_state(self, char):
-        '''Siguiente estado de la maquina, devuelve si la transición es válida o no'''
+        '''Siguiente estado de la maquina, devuelve el estado siguiente'''
 
         try: 
             self.state = self.matriz[str(self.state)][char]
         except KeyError:
             self.state = -1 # Estado de error
-            return False
 
-        return True
+        return self.state
 
-
-    def parse(self, texto : str, steps : bool = False):
+    def parse(self, texto : str):
         '''Devuelve una lista de los estados por los que
-        pasa la máquina mientras procesa el texto'''
+        pasa la máquina mientras procesa el texto
 
-        if not texto:
-            return [] if steps else False
+        Si steps es True, devuelve una lista de tuplas
+        (estado, letra, estado siguiente)
+        '''
 
-        transitions = []
+        i = 0
         for i, char in enumerate(texto):
-
-            if steps:
-                next_state = self.matriz.transition(self.state, char)
-                transitions.append((self.state, char, next_state))
-
-            if not self.next_state(char):
+            if self.next_state(char) == -1:
                 break
 
         parsed_correctly = (i == len(texto) - 1) and self.estados.is_final(self.state)
         self.reset()
 
-        return transitions if steps else parsed_correctly
+        return parsed_correctly
+
+    def trace(self, texto : str):
+        ''' Devuelve una lista de las transiciones por las que ha pasado la cadena'''
+
+        transitions = []
+        for i, char in enumerate(texto):
+            transitions.append((self.state, char, self.next_state(char)))
+
+        self.reset()
+
+        return transitions
 
 
-    def generate(self, n: int, max_len: int):
-        '''Genera n cadenas validas para la expresión, de longitud maxima len'''
+    def generate_all(self, max_len: int):
+        '''Devuelve un generador de cadenas validas para la expresión, de longitud maxima len
 
-        def generate_all(cadena=''):
+        Sigue siendo eficiente pues no devuelve todos los resultados posibles, sino
+        un generador, se generan '''
+
+        def generator(cadena=''):
             if len(cadena) <= max_len:
                 if self.parse(cadena):
                     yield cadena
                 if len(cadena) < max_len:
                     for letra in self.alfabeto:
-                        yield from generate_all(cadena + letra)
+                        yield from generator(cadena + letra)
+
+        return generator()
+
+
+    def generate(self, n: int, max_len: int):
+        '''Genera n cadenas validas para la expresión, de longitud maxima len'''
 
         count = 0
-        for palabra in generate_all():
+
+        for palabra in self.generate_all(max_len):
             if count >= n:
                 break
             yield palabra
             count += 1
+

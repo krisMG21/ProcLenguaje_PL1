@@ -1,0 +1,14 @@
+{
+    "alfabeto": "",
+    "expresion": "",
+    "estados": 0,
+    "inicial": 0,
+    "finales": [],
+    "matriz": {
+        "0": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    }
+}
