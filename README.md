@@ -7,7 +7,7 @@ a la clase Maquina para realizar operaciones
 
 La ejecución del programa se realiza de este modo:
 
-``` bash
+```bash
 python3 main.py <archivo_json>
 ```
 
@@ -34,7 +34,7 @@ datos de la expresión.
 * test.py: Conjunto de tests para todas las clases y todas sus funcionalidades
 Para ejecutar los test, no es necesario ningún tipo de argumento:
 
-``` bash
+```bash
 python3 test.py
 ```
 
@@ -52,7 +52,7 @@ de la expresión. El formato del archivo debe ser como el del siguiente ejemplo:
     "finales": [
         1,
         2,
-        ...,
+        3
     ],
     "matriz": {
         "0": {"a": 1},
