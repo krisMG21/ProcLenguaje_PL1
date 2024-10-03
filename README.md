@@ -1,6 +1,6 @@
 # PL1 - Procesadores del lenguaje
 
-Éste autómata de estados está implementado de forma compacta y modular:
+Éste autómata de estados / parser, está implementado de forma compacta y modular:
 
 * main.py: programa principal, contiene el bucle de ejecución y accede únicamente
 a la clase Maquina para realizar operaciones
@@ -62,3 +62,10 @@ de la expresión. El formato del archivo debe ser como el del siguiente ejemplo:
         "4": {"b": 4, "c": 5},
         "5": {"c": 5}
     }
+```
+* expresion: Expresión regular en formato JFLAPS, haciendo uso solo de (), + y *
+* alfabeto --> maquina.Alfabeto
+* estados --> Número de estados disponibles
+* inicial, finales
+* matriz --> Matriz de transiciones, diccionario de la forma {"curr_state" : {"char": next_state}}
+  realizados a partir del AFD minimizado.
