@@ -46,9 +46,9 @@ def execute_and_print(maquina, command):
     '''
 
     result = eval(command)
-    if hasattr(result, '__iter__') and not (isinstance(result, str) or isinstance(result, list)):
+    if hasattr(result, '__iter__') and not isinstance(result, str):
         for i in result:
-            print(i + '\n')
+            print(i)
     elif result is not None:
         print(result)
 
@@ -57,6 +57,7 @@ def iniciar_consola(maquina):
     Inicia la consola interactiva para interactuar con la maquina
     '''
 
+    print('\033[2J\033[0;0H') # Borramos la pantalla y posicionamos el cursor en la posición 1,1
     print('Expresion: ' + maquina.get_expr() + '\n')
     print('Matriz:\n' + str(maquina.get_matriz()) + '\n')
     print('Try parse(str), generate(n, m) or next_state(char), or help for more info')
@@ -76,8 +77,13 @@ def iniciar_consola(maquina):
                     break
                 case _:
                     execute_and_print(maquina, 'maquina.' + texto)
-        except AttributeError as e:
-            print(e)
+
+        except AttributeError:
+            print('Esa función no existe')
+
+        except KeyboardInterrupt:
+            print('\n')
+
         except Exception as e:
             print(e)
 

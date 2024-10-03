@@ -183,7 +183,7 @@ class Maquina:
 
     def get_alfabeto(self):
         '''Devuelve el alfabeto'''
-        return self.alfabeto.get()
+        return self.alfabeto
 
     def get_expr(self):
         '''Devuelve la expresión'''
