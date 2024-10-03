@@ -1,0 +1,24 @@
+parse('hola')
+generate(100, 10)
+exit
+reset()
+parse('abcbbabcaac')
+trace('abcaabcbacac')
+trace('error')
+next_state('a')
+next_state('b')
+next_state('c')
+reset()
+next_state('c')
+next_state('b')
+next_state('a')
+reset()
+clear
+help
+get_state()
+next_state('x')
+get_state()
+reset()
+get_matriz()
+get_expr()
+exit

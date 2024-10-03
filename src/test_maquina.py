@@ -1,25 +1,25 @@
 import json
 import pytest
-from maquina import Alfabeto, Estados, Matriz, Maquina
+from maquina import Estados, Matriz, Maquina
 
 @pytest.fixture
 def config():
     return json.load(open('test.json'))
 
-def test_alfabeto():
-    alfabeto = Alfabeto('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-    assert alfabeto[25] == 'Z'
-    assert alfabeto.index('A') == 0
-    assert alfabeto.index('Z') == 25
-    assert 'A' in alfabeto
-    assert 'Z' in alfabeto
-    assert 'a' not in alfabeto
-    assert 'z' not in alfabeto
-    assert 'ABC' in alfabeto
-    assert 'abc' not in alfabeto
-    assert str(alfabeto) == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    assert len(alfabeto) == 26
-    assert list(alfabeto) == list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+# def test_alfabeto():
+#     alfabeto = Alfabeto('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+#     assert alfabeto[25] == 'Z'
+#     assert alfabeto.index('A') == 0
+#     assert alfabeto.index('Z') == 25
+#     assert 'A' in alfabeto
+#     assert 'Z' in alfabeto
+#     assert 'a' not in alfabeto
+#     assert 'z' not in alfabeto
+#     assert 'ABC' in alfabeto
+#     assert 'abc' not in alfabeto
+#     assert str(alfabeto) == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+#     assert len(alfabeto) == 26
+#     assert list(alfabeto) == list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 def test_estados():
     estados = Estados([0, 1, 2], 0, [2])

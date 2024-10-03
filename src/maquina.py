@@ -3,43 +3,40 @@
 import json
 
 # ALFABETO ==================================================================
-class Alfabeto:
-    '''
-    private letras: str
-
-    Encapsula la cadena del alfabeto, pero
-    provee las funciones y accesos esenciales.
-
-    Implementa además los métodos que definen el
-    comportamiento que se requiere para el proyecto.
-    '''
-
-    def __init__(self, letras : str):
-        self.letras = letras
-
-    def __str__(self):
-        return self.letras
-
-    def __len__(self):
-        return len(self.letras)
-
-    def __getitem__(self, indice):
-        return self.letras[indice]
-
-    def __iter__(self):
-        return iter(self.letras)
-
-    def __contains__(self, letra):
-        return letra in self.letras
-
-    def get(self):
-        return self.letras
-
-    def index(self, letra):
-        return self.letras.index(letra)
-
-    def isValid(self, palabra):
-        return all(letra in self.letras for letra in palabra)
+# class Alfabeto:
+#     '''
+#     private letras: str
+#
+#     Encapsula la cadena del alfabeto, pero
+#     provee las funciones y accesos esenciales.
+#
+#     Implementa además los métodos que definen el
+#     comportamiento que se requiere para el proyecto.
+#     '''
+#
+#     def __init__(self, letras : str):
+#         self.letras = letras
+#
+#     def __str__(self):
+#         return self.letras
+#
+#     def __len__(self):
+#         return len(self.letras)
+#
+#     def __getitem__(self, indice):
+#         return self.letras[indice]
+#
+#     def __iter__(self):
+#         return iter(self.letras)
+#
+#     def __contains__(self, letra):
+#         return letra in self.letras
+#
+#     def get(self):
+#         return self.letras
+#
+#     def index(self, letra):
+#         return self.letras.index(letra)
 
 
 
@@ -159,7 +156,7 @@ class Maquina:
 
         config = json.load(open(json_file))
         self.expr = config["expresion"]
-        self.alfabeto = Alfabeto(config["alfabeto"])
+        self.alfabeto = config["alfabeto"]
         self.estados = Estados(
             list(range(config["estados"])),
             config["inicial"],
