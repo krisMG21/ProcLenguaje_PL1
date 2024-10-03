@@ -56,3 +56,25 @@ help
 generate(100,10)
 generate_all(10)
 exit
+parse('bcdedededdde')
+trace('bcdedededdde')
+parse('acacacbbbb')
+trace('acacacbbbb')
+generate(100, 10)
+generate(100,10)
+exit
+generate_all(10)
+smart_generate_all(10)
+exit
+smart_generate_all(10)
+exit
+smart_generate_all(10)
+exit
+smart_generate_all(10)
+parse('acacacbbbb')
+parse('bcdedededdde')
+smart_generate_all(10)
+parse('bcdedededdde')
+exit
+smart_generate_all(10)
+exit

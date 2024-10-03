@@ -2,44 +2,6 @@
 
 import json
 
-# ALFABETO ==================================================================
-# class Alfabeto:
-#     '''
-#     private letras: str
-#
-#     Encapsula la cadena del alfabeto, pero
-#     provee las funciones y accesos esenciales.
-#
-#     Implementa además los métodos que definen el
-#     comportamiento que se requiere para el proyecto.
-#     '''
-#
-#     def __init__(self, letras : str):
-#         self.letras = letras
-#
-#     def __str__(self):
-#         return self.letras
-#
-#     def __len__(self):
-#         return len(self.letras)
-#
-#     def __getitem__(self, indice):
-#         return self.letras[indice]
-#
-#     def __iter__(self):
-#         return iter(self.letras)
-#
-#     def __contains__(self, letra):
-#         return letra in self.letras
-#
-#     def get(self):
-#         return self.letras
-#
-#     def index(self, letra):
-#         return self.letras.index(letra)
-
-
-
 # ESTADOS ===================================================================
 
 class Estados:
@@ -71,10 +33,6 @@ class Estados:
     def get_finales(self) -> list[int]:
         '''Devuelve los estados finales'''
         return self.finales
-
-    def is_estado(self, estado : int):
-        '''Devuelve si el estado es válido'''
-        return estado in self.estados
 
     def is_final(self, estado : int):
         '''Devuelve si el estado es final'''
@@ -127,14 +85,6 @@ class Matriz:
                     cadena += '_ '
             cadena += '\n'
         return cadena
-
-    def transition(self, estado : int, letra : str):
-        try:
-            return self.matriz[str(estado)][letra]
-        except KeyError:
-            return None
-
-
 
 # MAQUINA ===================================================================
 
@@ -189,15 +139,21 @@ class Maquina:
         '''Devuelve la expresión'''
         return self.expr
 
-    def next_state(self, char):
-        '''Siguiente estado de la maquina, devuelve el estado siguiente'''
+    def peek_state(self, state: int, char: str):
+        '''Devuelve el estado siguiente, sin cambiar el estado de la maquina'''
 
         try: 
-            self.state = self.matriz[str(self.state)][char]
+            return self.matriz[str(state)][char]
         except KeyError:
-            self.state = -1 # Estado de error
+            return -1 # Estado de error
+
+    def next_state(self, char: str):
+        '''Siguiente estado de la maquina, devuelve el estado siguiente'''
+
+        self.state = self.peek_state(self.state, char)
 
         return self.state
+
 
     def parse(self, texto : str):
         '''Devuelve una lista de los estados por los que
@@ -208,10 +164,12 @@ class Maquina:
         '''
 
         i = 0
+        # Iteramos sobre el texto
         for i, char in enumerate(texto):
             if self.next_state(char) == -1:
                 break
 
+        # Es válida si ha procesado toda la cadena y ha llegado al estado final
         parsed_correctly = (i == len(texto) - 1) and self.estados.is_final(self.state)
         self.reset()
 
@@ -224,24 +182,27 @@ class Maquina:
         for i, char in enumerate(texto):
             transitions.append((self.state, char, self.next_state(char)))
 
+        # Proceso parecido a parse, pero sigue la traza aun por estados de error
+
         self.reset()
 
         return transitions
 
-
     def generate_all(self, max_len: int):
-        '''Devuelve un generador de cadenas validas para la expresión, de longitud maxima len
+        '''Devuelve un generador de cadenas validas para la expresión, de longitud maxima len'''
 
-        Sigue siendo eficiente pues no devuelve todos los resultados posibles, sino
-        un generador, se generan '''
+        assert max_len > 0, 'La longitud máxima debe ser mayor que 0'
 
-        def generator(cadena=''):
-            if len(cadena) <= max_len:
-                if self.parse(cadena):
-                    yield cadena
-                if len(cadena) < max_len:
-                    for letra in self.alfabeto:
-                        yield from generator(cadena + letra)
+        def generator(cadena='', state=self.estados.get_inicial(), len = 0):
+            # Si el estado es final, devuelve la cadena
+            if self.estados.is_final(state):
+                yield cadena
+            # Si no ha alcanzado la longitud máxima, sigue probando letras
+            if len < max_len:
+                for letra in self.alfabeto:
+                    next_state = self.peek_state(state, letra)
+                    if next_state != -1:
+                        yield from generator(cadena + letra, self.peek_state(state, letra), len + 1)
 
         return generator()
 
@@ -251,6 +212,7 @@ class Maquina:
 
         count = 0
 
+        # Iteramos sobre la función de generación
         for palabra in self.generate_all(max_len):
             if count >= n:
                 break
