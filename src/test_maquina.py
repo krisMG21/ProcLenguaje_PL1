@@ -1,31 +1,15 @@
 import json
 import pytest
-from maquina import Estados, Matriz, Maquina
+from automata import Estados, Matriz, Automata
+from maquina import Maquina
 
 @pytest.fixture
 def config():
     return json.load(open('test.json'))
 
-# def test_alfabeto():
-#     alfabeto = Alfabeto('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-#     assert alfabeto[25] == 'Z'
-#     assert alfabeto.index('A') == 0
-#     assert alfabeto.index('Z') == 25
-#     assert 'A' in alfabeto
-#     assert 'Z' in alfabeto
-#     assert 'a' not in alfabeto
-#     assert 'z' not in alfabeto
-#     assert 'ABC' in alfabeto
-#     assert 'abc' not in alfabeto
-#     assert str(alfabeto) == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-#     assert len(alfabeto) == 26
-#     assert list(alfabeto) == list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-
 def test_estados():
-    estados = Estados([0, 1, 2], 0, [2])
-    assert estados.get_inicial() == 0
-    assert estados.is_estado(1)
-    assert not estados.is_estado(3)
+    estados = Estados(3, 0, [2])
+    assert estados.inicial == 0
     assert estados.is_final(2)
     assert not estados.is_final(1)
 
@@ -46,8 +30,17 @@ def test_matriz(config):
     )
     assert str(matriz) == expected_str
 
+def test_automata():
+    automata = Automata('test.json')
+    assert automata.estados.estados == [0, 1, 2, 3]
+    assert automata.estados.inicial == 0
+    assert automata.estados.finales == [3]
+    assert automata.alfabeto == 'abc'
+    assert automata.expr == 'aa*bb*c'
+
 def test_maquina():
-    maquina = Maquina('test.json')
+    automata = Automata('test.json')
+    maquina = Maquina(automata)
     assert maquina.parse('abc')
     assert maquina.parse('aabbc')
     assert not maquina.parse('abca')

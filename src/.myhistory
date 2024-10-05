@@ -1,55 +1,3 @@
-parse('hola')
-generate(100, 10)
-exit
-reset()
-parse('abcbbabcaac')
-trace('abcaabcbacac')
-trace('error')
-next_state('a')
-next_state('b')
-next_state('c')
-reset()
-next_state('c')
-next_state('b')
-next_state('a')
-reset()
-clear
-help
-get_state()
-next_state('x')
-get_state()
-reset()
-get_matriz()
-get_expr()
-exit
-next_state('a')
-reset()
-trace('abc')
-trace('abcbabcabacbbabcabcbabcaac')
-clear
-help
-generate_all(8)
-generate(50, 8)
-exigt
-exit
-generate_all(8)
-generate_all(14)
-exit
-trace('abcbcbcbbc')
-clear
-help
-exit
-parse('aaabcaabcaabcbcaabc')
-trace('aaabcaabcaabcbcaabc')
-clear
-help
-get_expr()
-get_alfabeto()
-get_matriz()
-get_staet()
-get_state()
-exit
-get_alfabeto()
 exit
 get_alfabeto()
 help
@@ -77,4 +25,76 @@ smart_generate_all(10)
 parse('bcdedededdde')
 exit
 smart_generate_all(10)
+exit
+generate_all(10)
+generate(100,10)
+generate_all(12)
+clear
+help
+next_state('a')
+reset()
+next_state('b')
+reset()
+exit
+get_matriz()
+get_estados()
+help
+get_expr)(
+get_expr()
+get_alfabeto()
+get_state()
+generate(100,10)
+generate_all()
+generate_all(10)
+generate_all(12)
+generate_all(20)
+generate_all(5)
+get_expr()
+clear
+help
+exit
+get_estad
+exit
+get_estados()
+exit
+get_estados()
+exit
+get_estados()
+clear
+help
+parse('abc')
+clear
+get_expr
+get_expr()
+parse('acb')
+parse('acbbb')
+generate_all(5)
+generate_all(5,5)
+generate(5,5)
+clear
+get_matriz()
+get_estados()
+get_expr()
+get_alfabeto()
+exit
+get_matriz()
+get_expr(I)
+get_expr()
+trace('acbbbbb')
+exit
+get_matriz()
+get_expr()
+get_alfabeto()
+get_estados()
+exit
+generate(500, 12)
+generate(1000, 12)
+generate(1000, 13)
+generate(1000, 14)
+generate(1000, 15)
+generate(1000, 20)
+generate(2000, 20)
+generate(5000, 20)
+generate(10000, 20)
+generate(20000, 20)
 exit

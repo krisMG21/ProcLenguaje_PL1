@@ -77,9 +77,9 @@ def iniciar_consola(maquina):
                     break
                 case _:
                     execute_and_print(maquina, 'maquina.' + texto)
-
-        except AttributeError:
-            print('Esa función no existe')
+        #
+        # except AttributeError:
+        #     print('Esa función no existe')
 
         except KeyboardInterrupt:
             print('\n')
