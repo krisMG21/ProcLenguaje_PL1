@@ -1,7 +1,5 @@
 {
-    "alfabeto": "abcde",
     "expresion": "((ac)*(bb)*b)+(bc(d+e)*)",
-    "estados": 7,
     "inicial": 0,
     "finales": [
         4,

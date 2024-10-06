@@ -13,12 +13,12 @@ class Estados:
     Dado un archivo de expresiones, crea una matriz
     de estados así como los estados disponibles.
 
-    Encapsula la matriz y provee de las funciones
+    Encapsula los estados y provee de las funciones
     y accesos esenciales.
     '''
-
-    def __init__(self, estados : int, inicial : int, finales : list[int]):
-        self.estados = list(range(estados))
+    
+    def __init__(self, estados : list[int], inicial : int, finales : list[int]):
+        self.estados = estados
         self.inicial = inicial
         self.finales = finales
 
@@ -42,21 +42,28 @@ class Matriz:
     '''
     private matriz: dict{"estado" : dict{letra : estado}}
 
-    Contiene una matriz de estados y letras, que en realidad
-    es un diccionario de diccionarios.
+    Contiene una matriz de estados y letras, implementada
+    en forma de diccionario de diccionarios.
 
     Encapsula la matriz y provee de las funciones
     y accesos esenciales.
     '''
 
-    def __init__(self, alfabeto : str, matriz: dict):
+    def __init__(self, matriz: dict):
         self.matriz = matriz
-        self.estados = matriz.keys()
-        self.alfabeto = alfabeto
+        self.estados = [int(estado) for estado in matriz.keys()]
 
-    def __getitem__(self, i):
+        # Obtenemos el alfabeto completo desde la matriz
+        alfabeto = set()
+
+        for estado in self.matriz.values():
+            alfabeto.update(letra for letra in estado.keys())
+
+        self.alfabeto = str.join('', sorted(list(alfabeto)))
+
+    def __getitem__(self, estado):
         '''Para acceder de la forma matriz[estado][letra]'''
-        return self.matriz[i]
+        return self.matriz[estado]
 
     def __str__(self):
         '''Devuelve la matriz como una cadena tipo:
@@ -76,7 +83,7 @@ class Matriz:
             for letra in self.alfabeto:
                 # Si no existe esa transición, se añade un '_' en su lugar
                 try:
-                    cadena += str(self.matriz[estado][letra]) + ' '
+                    cadena += str(self.matriz[str(estado)][letra]) + ' '
                 except KeyError:
                     cadena += '_ '
             cadena += '\n'
@@ -89,17 +96,35 @@ class Automata:
     def __init__(self, expr_json : str):
         '''Carga los componentes de la maquina desde un json'''
         config = json.load(open(expr_json))
+        self.matriz = Matriz(config['matriz'])
         self.estados = Estados(
-            config['estados'],
+            self.matriz.estados,
             config['inicial'],
             config['finales'])
-        self.alfabeto = config['alfabeto']
-        self.matriz = Matriz(config['alfabeto'], config['matriz'])
         self.expr = config['expresion']
+        self.state = config['inicial']
+
+    def reset(self):
+        self.state = self.estados.get_inicial()
+
+    def peek_state(self, state: int, char: str):
+        '''Devuelve el estado siguiente, sin cambiar el estado de la maquina'''
+
+        try:
+            return self.matriz[str(state)][char]
+        except KeyError:
+            return -1 # Estado de error
+
+    def next_state(self, char: str):
+        '''Avanza al siguiente estado de la maquina, devuelve el nuevo estado'''
+
+        self.state = self.peek_state(self.state, char)
+
+        return self.state
 
     def get_alfabeto(self):
         '''Devuelve el alfabeto'''
-        return self.alfabeto
+        return self.matriz.alfabeto
 
     def get_matriz(self):
         '''Devuelve la matriz'''

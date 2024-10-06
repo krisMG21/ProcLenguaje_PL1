@@ -1,7 +1,5 @@
 {
-    "alfabeto": "abc",
     "expresion": "aa*bb*c",
-    "estados": 4,
     "inicial": 0,
     "finales": [
         3

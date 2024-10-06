@@ -23,27 +23,6 @@ class Maquina:
         self.estados = self.automata.get_estados()
         self.matriz = self.automata.get_matriz()
         self.alfabeto = self.automata.get_alfabeto()
-        self.state = automata.get_inicial()
-
-    def reset(self):
-        self.state = self.automata.get_inicial()
-
-
-    def peek_state(self, state: int, char: str):
-        '''Devuelve el estado siguiente, sin cambiar el estado de la maquina'''
-
-        try:
-            return self.matriz[str(state)][char]
-        except KeyError:
-            return -1 # Estado de error
-
-    def next_state(self, char: str):
-        '''Avanza al siguiente estado de la maquina, devuelve el nuevo estado'''
-
-        self.state = self.peek_state(self.state, char)
-
-        return self.state
-
 
     def parse(self, texto : str):
         '''Devuelve una lista de los estados por los que
@@ -53,11 +32,11 @@ class Maquina:
         i = 0
         # Iteramos sobre el texto
         for i, char in enumerate(texto):
-            if self.next_state(char) == -1:
+            if self.automata.next_state(char) == -1:
                 break
 
         # Es válida si ha procesado toda la cadena y ha llegado al estado final
-        parsed_correctly = (i == len(texto) - 1) and self.estados.is_final(self.state)
+        parsed_correctly = (i == len(texto) - 1) and self.estados.is_final(self.automata.state)
         self.reset()
 
         return parsed_correctly
@@ -67,11 +46,11 @@ class Maquina:
 
         transitions = []
         for char in texto:
-            transitions.append((self.state, char, self.next_state(char)))
+            transitions.append((self.automata.state, char, self.automata.next_state(char)))
 
         # Proceso parecido a parse, pero sigue la traza aun por estados de error
 
-        self.reset()
+        self.automata.reset()
 
         return transitions
 
@@ -88,7 +67,7 @@ class Maquina:
             # Si no ha alcanzado la longitud máxima, sigue probando letras
             if len < max_len:
                 for letra in self.alfabeto:
-                    next_state = self.peek_state(state, letra)
+                    next_state = self.automata.peek_state(state, letra)
                     if next_state != -1:
                         yield from generator(cadena + letra, next_state, len + 1)
 
@@ -109,7 +88,7 @@ class Maquina:
 
     def get_state(self):
         '''Devuelve el estado actual'''
-        return self.state
+        return self.automata.state
 
     def get_matriz(self):
         '''Devuelve la matriz'''
@@ -126,7 +105,3 @@ class Maquina:
     def get_expr(self):
         '''Devuelve la expresión'''
         return self.automata.get_expr()
-
-    def get_config(self):
-        '''Devuelve la configuración de la maquina'''
-        return self.automata.get_config()

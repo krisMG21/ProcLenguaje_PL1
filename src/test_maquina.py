@@ -8,18 +8,21 @@ def config():
     return json.load(open('test.json'))
 
 def test_estados():
-    estados = Estados(3, 0, [2])
+    estados = Estados([0, 1, 2, 3], 0, [2])
     assert estados.inicial == 0
     assert estados.is_final(2)
     assert not estados.is_final(1)
 
 def test_matriz(config):
-    matriz = Matriz(config["alfabeto"], config["matriz"])
+    matriz = Matriz(config["matriz"])
 
     assert matriz["0"] == {"a": 1}
     assert matriz["1"] == {"a": 1, "b": 2}
     assert matriz["2"] == {"b": 2, "c": 3}
     assert matriz["3"] == {}
+
+    assert matriz.alfabeto == 'abc'
+    assert matriz.estados == [0, 1, 2, 3]
 
     expected_str = (
         '  a b c \n'
@@ -30,13 +33,15 @@ def test_matriz(config):
     )
     assert str(matriz) == expected_str
 
-def test_automata():
+def test_automata(config):
     automata = Automata('test.json')
     assert automata.estados.estados == [0, 1, 2, 3]
-    assert automata.estados.inicial == 0
-    assert automata.estados.finales == [3]
-    assert automata.alfabeto == 'abc'
+    assert automata.estados.get_inicial() == 0
+    assert automata.estados.is_final(2)
+    assert not automata.estados.is_final(1)
+    assert automata.matriz.matriz == config["matriz"]
     assert automata.expr == 'aa*bb*c'
+    assert automata.estados.estados == automata.matriz.estados
 
 def test_maquina():
     automata = Automata('test.json')
