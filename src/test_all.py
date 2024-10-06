@@ -38,7 +38,7 @@ def test_automata(config):
     automata = Automata('test.json')
     assert automata.estados.estados == [0, 1, 2, 3]
     assert automata.estados.get_inicial() == 0
-    assert automata.estados.is_final(2)
+    assert automata.estados.is_final(3)
     assert not automata.estados.is_final(1)
     assert automata.matriz.matriz == config["matriz"]
     assert automata.expr == 'aa*bb*c'

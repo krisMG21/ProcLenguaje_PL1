@@ -18,21 +18,18 @@ class Maquina:
     '''
 
     def __init__(self, automata : Automata):
-        '''Carga los componentes de la maquina desde un json, e inicializa el estado actual'''
+        ''' Carga el automata dado e inicializa el estado actual '''
         self.automata = automata
-        self.estados = self.automata.get_estados()
-        self.matriz = self.automata.get_matriz()
-        self.alfabeto = self.automata.get_alfabeto()
-        self.state = self.estados.get_inicial()
+        self.state = self.automata.get_estados().get_inicial()
 
     def reset(self):
-        self.state = self.estados.get_inicial()
+        self.state = self.automata.get_estados().get_inicial()
 
     def peek_state(self, state: int, char: str):
         '''Devuelve el estado siguiente, sin cambiar el estado de la maquina'''
 
         try:
-            return self.matriz[str(state)][char]
+            return self.automata.get_matriz()[str(state)][char]
         except KeyError:
             return -1 # Estado de error
 
