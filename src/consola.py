@@ -1,5 +1,6 @@
 import readline
 
+
 ''' ¿Como funciona readline?
 
 Una vez inicializado, se integra con la función input() de python,
@@ -44,8 +45,18 @@ def execute_and_print(maquina, command):
     Dada una maquina y una expresión maquina.funcion()
     ejecuta la función e imprime el resultado, de seguido o por elementos
     '''
+    # Probamos a evaluar el comando, si es del main, lo ejecutamos tal cual
+    try:
+        result = eval(command)
+    except AttributeError:
+    # Y si no, probamos a evaluar como una función de la maquina
+        try: 
+            result = eval('maquina.' + command)
+        except AttributeError:
+            print('Esa función no existe')
+            return
 
-    result = eval(command)
+    # Imprimimos el resultado en pantalla de forma legible
     if hasattr(result, '__iter__') and not isinstance(result, str):
         for i in result:
             print(i)
@@ -76,7 +87,7 @@ def iniciar_consola(maquina):
                 case 'exit':
                     break
                 case _:
-                    execute_and_print(maquina, 'maquina.' + texto)
+                    execute_and_print(maquina, texto)
         #
         # except AttributeError:
         #     print('Esa función no existe')

@@ -23,72 +23,29 @@ class Maquina:
         self.estados = self.automata.get_estados()
         self.matriz = self.automata.get_matriz()
         self.alfabeto = self.automata.get_alfabeto()
+        self.state = self.estados.get_inicial()
 
-    def parse(self, texto : str):
-        '''Devuelve una lista de los estados por los que
-        pasa la máquina mientras procesa el texto
-        '''
+    def reset(self):
+        self.state = self.estados.get_inicial()
 
-        i = 0
-        # Iteramos sobre el texto
-        for i, char in enumerate(texto):
-            if self.automata.next_state(char) == -1:
-                break
+    def peek_state(self, state: int, char: str):
+        '''Devuelve el estado siguiente, sin cambiar el estado de la maquina'''
 
-        # Es válida si ha procesado toda la cadena y ha llegado al estado final
-        parsed_correctly = (i == len(texto) - 1) and self.estados.is_final(self.automata.state)
-        self.reset()
+        try:
+            return self.matriz[str(state)][char]
+        except KeyError:
+            return -1 # Estado de error
 
-        return parsed_correctly
+    def next_state(self, char: str):
+        '''Avanza al siguiente estado de la maquina, devuelve el nuevo estado'''
 
-    def trace(self, texto : str):
-        ''' Devuelve una lista de las transiciones por las que ha pasado la cadena'''
+        self.state = self.peek_state(self.state, char)
 
-        transitions = []
-        for char in texto:
-            transitions.append((self.automata.state, char, self.automata.next_state(char)))
-
-        # Proceso parecido a parse, pero sigue la traza aun por estados de error
-
-        self.automata.reset()
-
-        return transitions
-
-    def generate_all(self, max_len: int):
-        '''Devuelve un generador de cadenas validas para la expresión, de longitud maxima len'''
-
-        assert max_len > 0, 'La longitud máxima debe ser mayor que 0'
-
-        def generator(cadena='', state=self.estados.get_inicial(), len = 0):
-            # Si el estado es final, devuelve la cadena
-            if self.estados.is_final(state):
-                yield cadena
-
-            # Si no ha alcanzado la longitud máxima, sigue probando letras
-            if len < max_len:
-                for letra in self.alfabeto:
-                    next_state = self.automata.peek_state(state, letra)
-                    if next_state != -1:
-                        yield from generator(cadena + letra, next_state, len + 1)
-
-        return generator()
-
-
-    def generate(self, n: int, max_len: int):
-        '''Genera n cadenas validas para la expresión, de longitud maxima len'''
-
-        count = 0
-
-        # Iteramos sobre la función de generación
-        for palabra in self.generate_all(max_len):
-            if count >= n:
-                break
-            yield palabra
-            count += 1
+        return self.state
 
     def get_state(self):
         '''Devuelve el estado actual'''
-        return self.automata.state
+        return self.state
 
     def get_matriz(self):
         '''Devuelve la matriz'''

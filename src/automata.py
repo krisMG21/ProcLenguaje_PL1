@@ -104,24 +104,6 @@ class Automata:
         self.expr = config['expresion']
         self.state = config['inicial']
 
-    def reset(self):
-        self.state = self.estados.get_inicial()
-
-    def peek_state(self, state: int, char: str):
-        '''Devuelve el estado siguiente, sin cambiar el estado de la maquina'''
-
-        try:
-            return self.matriz[str(state)][char]
-        except KeyError:
-            return -1 # Estado de error
-
-    def next_state(self, char: str):
-        '''Avanza al siguiente estado de la maquina, devuelve el nuevo estado'''
-
-        self.state = self.peek_state(self.state, char)
-
-        return self.state
-
     def get_alfabeto(self):
         '''Devuelve el alfabeto'''
         return self.matriz.alfabeto
@@ -137,3 +119,7 @@ class Automata:
     def get_expr(self):
         '''Devuelve la expresión'''
         return self.expr
+
+    def get_state(self):
+        '''Devuelve el estado actual'''
+        return self.state

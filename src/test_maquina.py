@@ -2,6 +2,7 @@ import json
 import pytest
 from automata import Estados, Matriz, Automata
 from maquina import Maquina
+from main import parse, trace, generate, generate_all
 
 @pytest.fixture
 def config():
@@ -46,30 +47,50 @@ def test_automata(config):
 def test_maquina():
     automata = Automata('test.json')
     maquina = Maquina(automata)
-    assert maquina.parse('abc')
-    assert maquina.parse('aabbc')
-    assert not maquina.parse('abca')
-    assert not maquina.parse('abcabc')
 
-    assert maquina.trace('abc') == [
+    assert maquina.next_state('a') == 1
+    assert maquina.next_state('b') == 2
+    assert maquina.next_state('c') == 3
+    assert maquina.next_state('d') == -1
+
+    maquina.reset()
+    assert maquina.get_state() == 0
+
+    assert maquina.peek_state(0, 'a') == 1
+    assert maquina.peek_state(1, 'a') == 1
+    assert maquina.peek_state(1, 'b') == 2
+    assert maquina.peek_state(2, 'b') == 2
+    assert maquina.peek_state(2, 'c') == 3
+    assert maquina.peek_state(3, 'c') == -1
+    assert maquina.peek_state(3, 'd') == -1
+
+def test_main():
+    maquina = Maquina(Automata('test.json'))
+    # Comprobamos que la consola funciona
+    assert parse(maquina, 'abc')
+    assert parse(maquina, 'aabbc')
+    assert not parse(maquina, 'abca')
+    assert not parse(maquina, 'abcabc')
+
+    assert trace(maquina, 'abc') == [
         (0, 'a', 1),
         (1, 'b', 2),
         (2, 'c', 3)
     ]
-    assert maquina.trace('aabbc') == [
+    assert trace(maquina, 'aabbc') == [
         (0, 'a', 1),
         (1, 'a', 1),
         (1, 'b', 2),
         (2, 'b', 2),
         (2, 'c', 3)
     ]
-    assert maquina.trace('abca') == [
+    assert trace(maquina, 'abca') == [
         (0, 'a', 1),
         (1, 'b', 2),
         (2, 'c', 3),
         (3, 'a', -1)
     ]
-    assert maquina.trace('error') == [
+    assert trace(maquina, 'error') == [
         (0, 'e', -1),
         (-1, 'r', -1),
         (-1, 'r', -1),
@@ -82,8 +103,14 @@ def test_maquina():
     m = 10
 
     # Comprobamos que todas las cadenas son válidas y no exceden ni n ni m
-    generated = list(maquina.generate(n, m))
+    generated = list(generate(maquina, n, m))
     assert len(generated) <= n
     for cadena in generated:
         assert len(cadena) <= m
-        assert maquina.parse(cadena)
+        assert parse(maquina, cadena)
+
+    generated = list(generate_all(maquina, m))
+    for cadena in generated:
+        assert len(cadena) <= m
+        assert parse(maquina, cadena)
+
