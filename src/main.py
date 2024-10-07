@@ -1,75 +1,90 @@
 # main.py
+import readline
 from sys import argv
 from automata import Automata
 from maquina import Maquina
-from consola import iniciar_consola
+from funciones import maq_parse, maq_trace, maq_generate, maq_generate_all, help
+
+# Recuperamos el historial (si existe)
+histfile = ".myhistory"
+try:
+    readline.read_history_file(histfile)
+except FileNotFoundError:
+    pass
+
+readline.set_history_length(100)
 
 
-def parse(maquina: Maquina, texto: str):
-    '''Devuelve una lista de los estados por los que
-    pasa la máquina mientras procesa el texto
-    '''
-    i = 0
-    estados = maquina.automata.get_estados()
+def execute_and_print(maquina, command):
+    """
+    Dada una maquina y una expresión maquina.funcion()
+    ejecuta la función e imprime el resultado, de seguido o por elementos
+    """
 
-    # Iteramos sobre el texto
-    for i, char in enumerate(texto):
-        if maquina.next_state(char) == -1:
-            break
-    # Es válida si ha procesado toda la cadena y ha llegado al estado final
-    parsed_correctly = (i == len(texto) - 1) and estados.is_final(maquina.state)
-    maquina.reset()
+    def parse(texto):
+        maq_parse(maquina, texto)
 
-    return parsed_correctly
+    def trace(texto):
+        maq_trace(maquina, texto)
 
+    def generate(n, m):
+        maq_generate(maquina, n, m)
 
-def trace(maquina: Maquina, texto: str):
-    '''Devuelve una lista de las transiciones por las que ha pasado la cadena'''
+    def generate_all(n):
+        maq_generate_all(maquina, n)
 
-    transitions = []
-    for char in texto:
-        transitions.append((maquina.get_state(), char, maquina.next_state(char)))
+    # Probamos a evaluar el comando, si es del main, lo ejecutamos tal cual
+    try:
+        result = eval(command)
+    except AttributeError:
+        print("Esa función no existe")
+        return
 
-    # Proceso parecido a parse, pero sigue la traza aun por estados de error
-
-    maquina.reset()
-
-    return transitions
-
-
-def generate_all(maquina: Maquina, max_len: int):
-    '''Devuelve un generador de cadenas validas para la expresión, de longitud maxima len'''
-
-    estados = maquina.automata.get_estados()
-    alfabeto = maquina.automata.get_alfabeto()
-
-    assert max_len > 0, "La longitud máxima debe ser mayor que 0"
-
-    def generator(cadena="", state=estados.get_inicial(), len=0):
-        # Si el estado es final, devuelve la cadena
-        if estados.is_final(state):
-            yield cadena
-        # Si no ha alcanzado la longitud máxima, sigue probando letras
-        if len < max_len:
-            for letra in alfabeto:
-                next_state = maquina.peek_state(state, letra)
-                if next_state != -1:
-                    yield from generator(cadena + letra, next_state, len + 1)
-
-    return generator()
+    # Imprimimos el resultado en pantalla de forma legible
+    if hasattr(result, "__iter__") and not isinstance(result, str):
+        for i in result:
+            print(i)
+    elif result is not None:
+        print(result)
 
 
-def generate(maquina: Maquina, n: int, max_len: int):
-    '''Genera n cadenas validas para la expresión, de longitud maxima len'''
+def iniciar_consola(maquina):
+    """
+    Inicia la consola interactiva para interactuar con la maquina
+    """
 
-    count = 0
+    # Borramos la pantalla y posicionamos el cursor en la posición 1,1
+    print("\033[2J\033[0;0H")
+    print("Expresion: " + maquina.get_expr() + "\n")
+    print("Matriz:\n" + str(maquina.get_matriz()) + "\n")
+    print("Try parse(str), generate(n, m) or next_state(char), or help for more info")
 
-    # Iteramos sobre la función de generación
-    for palabra in generate_all(maquina, max_len):
-        if count >= n:
-            break
-        yield palabra
-        count += 1
+    texto = ""
+    while texto != "exit":
+        try:
+            texto = input("> ")
+            match texto:
+                case "help":
+                    help()
+                case "clear":
+                    # Codigo ANSI para borrar la pantalla y posicionar
+                    # el cursor en la posición 1,1
+                    print("\033[2J\033[1;1H")
+                case "exit":
+                    break
+                case _:
+                    execute_and_print(maquina, texto)
+        #
+        # except AttributeError:
+        #     print('Esa función no existe')
+
+        except KeyboardInterrupt:
+            print("\n")
+
+        except Exception as e:
+            print(e)
+
+    readline.write_history_file(histfile)
 
 
 def main():
