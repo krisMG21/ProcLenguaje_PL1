@@ -15,35 +15,36 @@ except FileNotFoundError:
 readline.set_history_length(100)
 
 
-def execute_and_print(maquina, command):
+def execute_and_print(maquina: Maquina, command):
     """
     Dada una maquina y una expresión maquina.funcion()
     ejecuta la función e imprime el resultado, de seguido o por elementos
     """
 
+    # They raise warnings, because they are only used on exec
     def parse(texto):
-        maq_parse(maquina, texto)
+        return maq_parse(maquina, texto)
 
     def trace(texto):
-        maq_trace(maquina, texto)
+        return maq_trace(maquina, texto)
 
     def generate(n, m):
-        maq_generate(maquina, n, m)
+        return maq_generate(maquina, n, m)
 
     def generate_all(n):
-        maq_generate_all(maquina, n)
+        return maq_generate_all(maquina, n)
 
     # Probamos a evaluar el comando, si es del main, lo ejecutamos tal cual
     try:
         result = eval(command)
-    except AttributeError:
-        print("Esa función no existe")
-        return
+    except Exception:
+        result = eval(f"maquina.{command}", {"maquina": maquina})
 
-    # Imprimimos el resultado en pantalla de forma legible
+    # Print elem by elem if its iterable and not a string
     if hasattr(result, "__iter__") and not isinstance(result, str):
         for i in result:
             print(i)
+    # Else just print them
     elif result is not None:
         print(result)
 
