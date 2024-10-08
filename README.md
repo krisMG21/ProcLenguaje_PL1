@@ -14,29 +14,25 @@ python3 main.py <archivo_json>
 Donde `<archivo_json>` es el nombre del archivo .json con los
 datos de la expresión.
 
+* automata.py: Define el autómata, así como sus componentes:
+  * Matriz: contiene la matriz de transición y el control de acceso a ella
+  * Estados: estados disponibles, inicial y finales
+  * Automata: contiene toda la información que se pueda requerir de un
+    autómata finito
+
 * maquina.py: implementa Maquina y los principales componentes de ella:
 
-  * Alfabeto: conjunto de caracteres válidos, operaciones de string +
-  validación de caracteres
+  * Maquina: implementa la maquina, que contiene el correspondiente
+    autómata, así como el estado actual y la lógica de estados
 
-  * Estados: contiene todos los estados, especificando cuál es el inicial y
-    cuáles los finales.
-    Contiene métodos para contrastar cualquier estado los conjuntos anteriores.
-
-  * Matriz: implementa la matriz de transiciones.
-    Contiene acceso por `[estado][letra]` o por la función `self.transition(estado,
-    letra)` y método para convertirla a cadena
-  
-  * Maquina: implementa la maquina, que contiene toda la información necesaria.
-  Solo necesita el nombre de un archivo .json con la expresión
-  y sus datos con el formato correcto para construirse.
-
-* test.py: Conjunto de tests para todas las clases y todas sus funcionalidades
+* test_all.py: Conjunto de tests para todas las clases y todas sus funcionalidades
 Para ejecutar los test, no es necesario ningún tipo de argumento:
 
 ```bash
-python3 test.py
+pytest
 ```
+
+* template.py:
 
 ## Ejemplo de uso
 
