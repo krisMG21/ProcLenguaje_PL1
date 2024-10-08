@@ -1,16 +1,10 @@
 # main.py
-import readline
+# import readline
 from sys import argv
-from automata import Automata
-from maquina import Maquina
+from maquina import Automata, Maquina
 from funciones import maq_parse, maq_trace, maq_generate, maq_generate_all, help
 
-# Recuperamos el historial (si existe)
-histfile = ".myhistory"
-try:
-    readline.read_history_file(histfile)
-except FileNotFoundError:
-    pass
+import readline
 
 readline.set_history_length(100)
 
@@ -38,7 +32,7 @@ def execute_and_print(maquina: Maquina, command):
     try:
         result = eval(command)
     except Exception:
-        result = eval(f"maquina.{command}", {"maquina": maquina})
+        result = eval(f"maquina.{command}")
 
     # Print elem by elem if its iterable and not a string
     if hasattr(result, "__iter__") and not isinstance(result, str):
@@ -47,6 +41,11 @@ def execute_and_print(maquina: Maquina, command):
     # Else just print them
     elif result is not None:
         print(result)
+
+    parse(command)
+    trace(command)
+    generate(10, 10)
+    generate_all(10)
 
 
 def iniciar_consola(maquina):
@@ -58,7 +57,7 @@ def iniciar_consola(maquina):
     print("\033[2J\033[0;0H")
     print("Expresion: " + maquina.get_expr() + "\n")
     print("Matriz:\n" + str(maquina.get_matriz()) + "\n")
-    print("Try parse(str), generate(n, m) or next_state(char), or help for more info")
+    print("Try parse(str), generate(n, m) or next_state(char), or help for more info\n")
 
     texto = ""
     while texto != "exit":
@@ -84,8 +83,6 @@ def iniciar_consola(maquina):
 
         except Exception as e:
             print(e)
-
-    readline.write_history_file(histfile)
 
 
 def main():

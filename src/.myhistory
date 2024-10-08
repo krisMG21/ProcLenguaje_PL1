@@ -1,5 +1,3 @@
-clear
-help
 parse('abc')
 clear
 get_expr
@@ -97,4 +95,6 @@ clear
 get_estados()
 get_state()
 get_matriz()
+exit
+get_estados()
 exit

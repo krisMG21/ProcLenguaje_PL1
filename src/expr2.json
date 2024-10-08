@@ -1,8 +1,8 @@
 {
-    "expresion": "a(bc + aa)*",
+    "expresion": "a(bc+aa)*cc",
     "inicial": 0,
     "finales": [
-        2
+        4
     ],
     "matriz": {
         "0": {
@@ -13,7 +13,11 @@
         },
         "2": {
             "a": 0,
-            "b": 1
+            "b": 1,
+            "c": 3
+        },
+        "3": {
+            "c": 4
         }
     }
 }
