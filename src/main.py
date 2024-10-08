@@ -31,6 +31,8 @@ def help():
         "-peek_state(state, char): Devuelve el siguiente estado de la máquina para el caracter char en el estado state"
     )
     print("-get_expr(): Devuelve la expresión de la máquina")
+    print("-get_estados(): Devuelve el conjunto de estados de la máquina")
+    print("-get_alfabeto(): Devuelve el alfabeto de la máquina")
     print("-get_matriz(): Devuelve la matriz de la máquina")
     print("-get_state(): Devuelve el estado actual de la máquina")
     print("-reset(): Reinicia la máquina")
