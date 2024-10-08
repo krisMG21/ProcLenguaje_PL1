@@ -1,39 +1,12 @@
 from maquina import Maquina
 
 
-def help():
-    print("Funciones disponibles:")
-    print(
-        "-parse(str): Devuelve una lista de los estados por los que pasa la máquina mientras procesa el texto"
-    )
-    print(
-        "-trace(str): Devuelve una lista de las transiciones por las que ha pasado la cadena"
-    )
-    print(
-        "-generate(n, m): Genera n cadenas validas para la expresión, de longitud maxima len"
-    )
-    print(
-        "-generate_all(n): Devuelve un generador de cadenas validas para la expresión, de longitud maxima len"
-        + "=" * 50
-    )
-    print(
-        "-next_state(char): Devuelve el siguiente estado de la máquina para el caracter char"
-    )
-    print(
-        "-peek_state(state, char): Devuelve el siguiente estado de la máquina para el caracter char en el estado state"
-    )
-    print("-get_expr(): Devuelve la expresión de la máquina")
-    print("-get_matriz(): Devuelve la matriz de la máquina")
-    print("-get_state(): Devuelve el estado actual de la máquina")
-    print("-reset(): Reinicia la máquina")
-
-
 def maq_parse(maquina: Maquina, texto: str):
     """Devuelve una lista de los estados por los que
     pasa la máquina mientras procesa el texto
     """
     i = 0
-    estados = maquina.automata.get_estados()
+    estados = maquina.get_estados()
 
     # Iteramos sobre el texto
     for i, char in enumerate(texto):
@@ -63,8 +36,8 @@ def maq_trace(maquina: Maquina, texto: str):
 def maq_generate_all(maquina: Maquina, max_len: int):
     """Devuelve un generador de cadenas validas para la expresión, de longitud maxima len"""
 
-    estados = maquina.automata.get_estados()
-    alfabeto = maquina.automata.get_alfabeto()
+    estados = maquina.get_estados()
+    alfabeto = maquina.get_alfabeto()
 
     assert max_len > 0, "La longitud máxima debe ser mayor que 0"
 
@@ -86,7 +59,7 @@ def maq_generate(maquina: Maquina, n: int, max_len: int):
     """Genera n cadenas validas para la expresión, de longitud maxima len"""
 
     # Iteramos sobre la función de generación
-    for i, palabra in enumerate(maq_generate_all(maquina.get_expr(), max_len)):
+    for i, palabra in enumerate(maq_generate_all(maquina, max_len)):
         if i >= n:
             break
         yield palabra

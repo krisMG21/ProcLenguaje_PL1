@@ -2,11 +2,38 @@
 # import readline
 from sys import argv
 from maquina import Automata, Maquina
-from funciones import maq_parse, maq_trace, maq_generate, maq_generate_all, help
+from funciones import maq_parse, maq_trace, maq_generate, maq_generate_all
 
 import readline
 
 readline.set_history_length(100)
+
+
+def help():
+    print("Funciones disponibles:")
+    print(
+        "-parse(str): Devuelve una lista de los estados por los que pasa la máquina mientras procesa el texto"
+    )
+    print(
+        "-trace(str): Devuelve una lista de las transiciones por las que ha pasado la cadena"
+    )
+    print(
+        "-generate(n, m): Genera n cadenas validas para la expresión, de longitud maxima len"
+    )
+    print(
+        "-generate_all(n): Devuelve un generador de cadenas validas para la expresión, de longitud maxima len"
+        + "=" * 50
+    )
+    print(
+        "-next_state(char): Devuelve el siguiente estado de la máquina para el caracter char"
+    )
+    print(
+        "-peek_state(state, char): Devuelve el siguiente estado de la máquina para el caracter char en el estado state"
+    )
+    print("-get_expr(): Devuelve la expresión de la máquina")
+    print("-get_matriz(): Devuelve la matriz de la máquina")
+    print("-get_state(): Devuelve el estado actual de la máquina")
+    print("-reset(): Reinicia la máquina")
 
 
 def execute_and_print(maquina: Maquina, command):
@@ -15,7 +42,7 @@ def execute_and_print(maquina: Maquina, command):
     ejecuta la función e imprime el resultado, de seguido o por elementos
     """
 
-    # They raise warnings, because they are only used on exec
+    # Generan avisos pq no se usan en código, sólo en ejecución
     def parse(texto):
         return maq_parse(maquina, texto)
 
@@ -34,24 +61,21 @@ def execute_and_print(maquina: Maquina, command):
     except Exception:
         result = eval(f"maquina.{command}")
 
-    # Print elem by elem if its iterable and not a string
+    # Imprime elem a elem si es iterable, a menos que sea str
     if hasattr(result, "__iter__") and not isinstance(result, str):
         for i in result:
             print(i)
-    # Else just print them
+    # Si no se imprime tal cual
     elif result is not None:
         print(result)
-
-    parse(command)
-    trace(command)
-    generate(10, 10)
-    generate_all(10)
 
 
 def iniciar_consola(maquina):
     """
     Inicia la consola interactiva para interactuar con la maquina
     """
+    import sys
+    import traceback
 
     # Borramos la pantalla y posicionamos el cursor en la posición 1,1
     print("\033[2J\033[0;0H")
