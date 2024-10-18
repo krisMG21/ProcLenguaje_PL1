@@ -32,7 +32,13 @@ Para ejecutar los test, no es necesario ningún tipo de argumento:
 pytest
 ```
 
-* template.py:
+* template.py: facilita la creación de nuevos archivos .json
+Aportando la expresión y el numero de estados, genera un ejemplo básico sobre el
+que definir tu autómata.
+
+```bash
+python3 template.py <nombre_archivo> <expresion> <num_estados>
+```
 
 ## Ejemplo de uso
 
@@ -59,9 +65,10 @@ de la expresión. El formato del archivo debe ser como el del siguiente ejemplo:
         "5": {"c": 5}
     }
 ```
+
 * expresion: Expresión regular en formato JFLAPS, haciendo uso solo de (), + y *
 * alfabeto --> maquina.Alfabeto
 * estados --> Número de estados disponibles
 * inicial, finales
-* matriz --> Matriz de transiciones, diccionario de la forma {"curr_state" : {"char": next_state}}
-  realizados a partir del AFD minimizado.
+* matriz --> Matriz de transiciones, diccionario de la forma {"curr_state" : 
+{"char": next_state}} realizados a partir del AFD minimizado.
