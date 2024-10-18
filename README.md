@@ -70,5 +70,5 @@ de la expresión. El formato del archivo debe ser como el del siguiente ejemplo:
 * alfabeto --> maquina.Alfabeto
 * estados --> Número de estados disponibles
 * inicial, finales
-* matriz --> Matriz de transiciones, diccionario de la forma {"curr_state" : 
+* matriz --> Matriz de transiciones, diccionario de la forma {"curr_state" :
 {"char": next_state}} realizados a partir del AFD minimizado.
